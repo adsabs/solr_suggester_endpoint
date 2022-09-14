@@ -5,7 +5,7 @@ Application
 import logging.config
 
 from werkzeug.serving import run_simple
-from .views import SuggesterView, AuthorSuggesterView, UATSuggesterView, NormalizedAuthorSuggesterView
+from .views import AuthorSuggesterView, UATSuggesterView, AuthorNormSuggesterView
 from flask_restful import Api
 from flask_discoverer import Discoverer
 from adsmutils import ADSFlask
@@ -28,7 +28,7 @@ def create_app(**config):
                      '/autocomplete/author',
                      methods=['GET'])
 
-    api.add_resource(NormalizedAuthorSuggesterView,
+    api.add_resource(AuthorNormSuggesterView,
                      '/autocomplete/author_norm',
                      methods=['GET'])
 
