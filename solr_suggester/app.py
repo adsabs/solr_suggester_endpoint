@@ -24,21 +24,18 @@ def create_app(**config):
     Discoverer(app)
     
     # Add the end resource end points
-    api.add_resource(SuggesterView,
-                     '/suggester',
+    api.add_resource(AuthorSuggesterView,
+                     '/autocomplete/author',
                      methods=['GET'])
 
-    api.add_resource(AuthorSuggesterView,
-                     '/suggester/authors/',
+    api.add_resource(NormalizedAuthorSuggesterView,
+                     '/autocomplete/author_norm',
                      methods=['GET'])
-    
+
     api.add_resource(UATSuggesterView,
-                     '/suggester/uat/',
+                     '/autocomplete/uat',
                      methods=['GET'])
                 
-    api.add_resource(NormalizedAuthorSuggesterView,
-                     '/suggester/author_norm/',
-                     methods=['GET'])
     return app
 
 
