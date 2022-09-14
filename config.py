@@ -21,4 +21,4 @@ if not os.path.isdir(LOG_PATH):
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'unset-env').lower()
 
-SOLR_SUGGEST_URL = "http://localhost:9983/solr/collection1/suggest"
+SOLR_SUGGEST_URL = "http://host.docker.internal:9983/solr/collection1/suggest"

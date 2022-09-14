@@ -43,12 +43,34 @@ class SuggesterView(Resource):
             raise ValueError(msg)
 
 class AuthorSuggesterView(SuggesterView):
-    @classmethod
-    def query_author_suggester(query, **kwargs):
-        return requests.get()
+    suggester = 'authorsuggester'
+    params = {'suggest': 'true', 'suggest.build': 'true', 'suggest.dictionary': suggester, 'suggest.count': '20', 'wt': 'json'}
 
-    def get():
-        return 0
+    @classmethod
+    def query_author_suggester(self, request):
+        user_params = self.get_GET_params(request)
+        for key in user_params.keys():
+            self.params[key] = user_params[key]
+        solr_response = self.query_solr_suggester(params=self.params)
+        
+        if solr_response.status_code == 200:
+            current_app.logger.info("Response is {}".format(solr_response.json()))
+            terms = solr_response.json()['suggest'][self.params['suggest.dictionary']][self.params['suggest.q']]['suggestions']
+            current_app.logger.info("Received suggestions: {}".format(terms))
+            suggestions ={"suggestions": []}
+            for i in terms:
+                suggestions['suggestions'].append(i["term"])
+            current_app.logger.info("Suggestions are : {}".format(suggestions['suggestions']))
+            
+        else:
+            current_app.logger.error("Failed to retrieve suggestions with error: {}".format(solr_response.status_code))
+            suggestions = {"suggestions": []}
+
+        return suggestions
+
+    def get(self):
+        response = self.query_author_suggester(request)
+        return response, 200
 
 class AuthorNormSuggesterView(SuggesterView):
     suggester = 'normsuggester'
@@ -82,6 +104,31 @@ class AuthorNormSuggesterView(SuggesterView):
 
 
 class UATSuggesterView(SuggesterView):
+    suggester = 'uatsuggester'
+    params = {'suggest': 'true', 'suggest.build': 'true', 'suggest.dictionary': suggester, 'suggest.count': '20', 'wt': 'json'}
+
+    @classmethod
+    def query_uat_suggester(self, request):
+        user_params = self.get_GET_params(request)
+        for key in user_params.keys():
+            self.params[key] = user_params[key]
+        solr_response = self.query_solr_suggester(params=self.params)
+        
+        if solr_response.status_code == 200:
+            current_app.logger.info("Response is {}".format(solr_response.json()))
+            terms = solr_response.json()['suggest'][self.params['suggest.dictionary']][self.params['suggest.q']]['suggestions']
+            current_app.logger.info("Received suggestions: {}".format(terms))
+            suggestions ={"suggestions": []}
+            for i in terms:
+                suggestions['suggestions'].append(i["term"])
+            current_app.logger.info("Suggestions are : {}".format(suggestions['suggestions']))
+            
+        else:
+            current_app.logger.error("Failed to retrieve suggestions with error: {}".format(solr_response.status_code))
+            suggestions = {"suggestions": []}
+
+        return suggestions
+        
     def get(self):
-        current_app.logger.info("Test endpoint reached")
-        return {"response": "Hit endpoint"}, 200
+        response = self.query_uat_suggester(request)
+        return response, 200
