@@ -1,0 +1,1 @@
+SOLR__SUGGEST_URL = "localhost:9983/suggest"
