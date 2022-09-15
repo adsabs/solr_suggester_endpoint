@@ -2,4 +2,4 @@ local_config.py
 venv/
 .venv
 logs/
-scripts/json_records/*
+scripts/json_records/AAS_*
