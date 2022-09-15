@@ -44,7 +44,7 @@ class SuggesterView(Resource):
 
 class AuthorSuggesterView(SuggesterView):
     suggester = 'authorsuggester'
-    params = {'suggest': 'true', 'suggest.build': 'true', 'suggest.dictionary': suggester, 'suggest.count': '20', 'wt': 'json'}
+    params = {'suggest': 'true', 'suggest.dictionary': suggester, 'suggest.count': '20', 'wt': 'json'}
 
     @classmethod
     def query_author_suggester(self, request):
@@ -74,7 +74,7 @@ class AuthorSuggesterView(SuggesterView):
 
 class AuthorNormSuggesterView(SuggesterView):
     suggester = 'normsuggester'
-    params = {'suggest': 'true', 'suggest.build': 'true', 'suggest.dictionary': suggester, 'suggest.count': '20', 'wt': 'json'}
+    params = {'suggest': 'true', 'suggest.dictionary': suggester, 'suggest.count': '20', 'wt': 'json'}
 
     @classmethod
     def query_author_norm_suggester(self, request):

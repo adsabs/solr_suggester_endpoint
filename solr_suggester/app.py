@@ -7,6 +7,7 @@ import logging.config
 from werkzeug.serving import run_simple
 from .views import AuthorSuggesterView, UATSuggesterView, AuthorNormSuggesterView
 from flask_restful import Api
+from flask import request
 from flask_discoverer import Discoverer
 from adsmutils import ADSFlask
 
@@ -18,6 +19,14 @@ def create_app(**config):
 
     app = ADSFlask(__name__, static_folder=None, local_config=config or {})
     app.url_map.strict_slashes = False
+
+    @app.before_request
+    def before_request():
+        referrer = request.referrer
+        if referrer:
+            print(referrer)
+        else: 
+            print(str("unable to get referrer")) 
 
     # Register extensions
     api = Api(app)
@@ -37,7 +46,7 @@ def create_app(**config):
                      methods=['GET'])
                 
     return app
-
+       
 
 if __name__ == '__main__':
     run_simple('0.0.0.0', 5000, create_app(), use_reloader=False, use_debugger=False)
