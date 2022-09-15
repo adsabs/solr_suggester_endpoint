@@ -9,6 +9,5 @@ RUN apt-get install -y git
 WORKDIR "/app/"
 RUN git clone https://github.com/adsabs/montysolr.git
 WORKDIR "/app/montysolr"
-RUN ls
 RUN ant ivy-bootstrap
 RUN ant build-all

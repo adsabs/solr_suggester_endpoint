@@ -2,3 +2,4 @@ local_config.py
 venv/
 .venv
 logs/
+scripts/json_records/*

@@ -8,7 +8,7 @@ services:
       - "4000:4000" 
     container_name: solr_suggester
     volumes:
-    - ./:/app
+    - ./:/app/
     extra_hosts:
         host.docker.internal: host-gateway
     user: ads
@@ -21,24 +21,20 @@ services:
     image: ubuntu:latest
     ports:
       - "8983:8983" 
-    container_name: solr_suggester
+    container_name: solr_search
     volumes:
-      - ./scripts/solrconfig.xml:/
-    user: ads
-    entrypoint: /app/scripts/solr_entrypoint.sh
+      - ./scripts/solrconfig.xml:/root/solrconfig.xml
+      - ./:/app/local
+    entrypoint: /app/local/scripts/solr_entrypoint.sh
 
   cors:
     image: nginx:alpine
-
     environment:
       BACKEND: solr_suggester:4000
-
     ports:
       - ${EXTERNAL_IP:-127.0.0.1}:8000:80
-
     volumes:
-      - ./nginx-cors-proxy.conf:/etc/nginx/conf.d/default.template:ro
-
+      - ./scripts/nginx-cors-proxy.conf:/etc/nginx/conf.d/default.template:ro
     command:
       - /bin/sh
       - -c
