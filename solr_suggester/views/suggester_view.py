@@ -32,12 +32,18 @@ class SuggesterView(Resource):
         except ValueError:
             msg = "Failed to parse input parameters: {}. Please confirm request is properly formatted.".format(request)
             raise ValueError(msg)
+        
         if "q" in get_params.keys():
             query = get_params.pop("q")
-            current_app.logger.info("Query is {}".format(query))
+            current_app.logger.debug("Query is {}".format(query))
             get_params["suggest.q"] = str(query).strip()
 
+            if "cf" in get_params.keys():
+                filter = get_params.pop("cf")
+                current_app.logger.debug("Context filter is {}".format(filter))
+                get_params["suggest.cfq"] = str(filter).strip()
             return get_params
+
         else:
             msg = "Query: {} is missing parameter 'q'. Please confirm request conforms to ADS /search syntax.".format(get_params)
             raise ValueError(msg)
@@ -103,12 +109,12 @@ class AuthorNormSuggesterView(SuggesterView):
         return response, 200
 
 
-class UATSuggesterView(SuggesterView):
-    suggester = 'uatsuggester'
-    params = {'suggest': 'true', 'suggest.build': 'true', 'suggest.dictionary': suggester, 'suggest.count': '20', 'wt': 'json'}
+class KeywordSuggesterView(SuggesterView):
+    suggester = 'keywordsuggester'
+    params = {'suggest': 'true', 'suggest.dictionary': suggester, 'suggest.count': '20', 'wt': 'json'}
 
     @classmethod
-    def query_uat_suggester(self, request):
+    def query_keyword_suggester(self, request):
         user_params = self.get_GET_params(request)
         for key in user_params.keys():
             self.params[key] = user_params[key]
@@ -125,10 +131,11 @@ class UATSuggesterView(SuggesterView):
             
         else:
             current_app.logger.error("Failed to retrieve suggestions with error: {}".format(solr_response.status_code))
+            current_app.logger.error("Failed to retrieve suggestions with error: {}".format(solr_response.text))
             suggestions = {"suggestions": []}
 
         return suggestions
         
     def get(self):
-        response = self.query_uat_suggester(request)
+        response = self.query_keyword_suggester(request)
         return response, 200

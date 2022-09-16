@@ -852,11 +852,11 @@
   </requestHandler>
  
 <!--request handler for /suggest endpoint-->
-<requestHandler name="/suggest" class="solr.SearchHandler" startup="lazy">
-  <lst name="authorsuggester">
+<requestHandler name="/suggest" class="solr.SearchHandler">
+<!-- <lst name="authorsuggester">
     <str name="suggest">true</str>
     <str name="suggest.count">20</str>
-  </lst>
+  </lst> -->
   <arr name="components">
     <str>suggest</str>
   </arr>
@@ -873,19 +873,22 @@
   </lst>
   <lst name="suggester">
     <str name="name">normsuggester</str>
-    <str name="lookupImpl">FuzzyLookupFactory</str>
-    <!--<str name="dictionaryImpl">DocumentDictionaryFactory</str>-->
+    <str name="lookupImpl">BlendedInfixLookupFactory</str>
+    <str name="dictionaryImpl">DocumentDictionaryFactory</str>
     <str name="field">author_norm</str>
+    <str name="contextField">database</str>
     <str name="suggestAnalyzerFieldType">normalized_text_ascii_notokenization</str>
     <str name="buildOnStartup">true</str>
+    <str name="highlight">false</str>
+
   </lst>
   <lst name="suggester">
-    <str name="name">uatsuggester</str>
+    <str name="name">keywordsuggester</str>
     <str name="lookupImpl">FuzzyLookupFactory</str>
     <!--<str name="dictionaryImpl">DocumentDictionaryFactory</str>-->
-    <str name="field">uat</str>
+    <str name="field">keyword</str>
     <str name="minFuzzyLength">4</str>
-    <str name="suggestAnalyzerFieldType">uat_tokens</str>
+    <str name="suggestAnalyzerFieldType">ads_text</str>
     <str name="buildOnStartup">true</str>
   </lst>
 </searchComponent> 

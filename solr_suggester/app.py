@@ -5,7 +5,7 @@ Application
 import logging.config
 
 from werkzeug.serving import run_simple
-from .views import AuthorSuggesterView, UATSuggesterView, AuthorNormSuggesterView
+from .views import AuthorSuggesterView, KeywordSuggesterView, AuthorNormSuggesterView
 from flask_restful import Api
 from flask import request
 from flask_discoverer import Discoverer
@@ -41,8 +41,8 @@ def create_app(**config):
                      '/autocomplete/author_norm',
                      methods=['GET'])
 
-    api.add_resource(UATSuggesterView,
-                     '/autocomplete/uat',
+    api.add_resource(KeywordSuggesterView,
+                     '/autocomplete/keyword',
                      methods=['GET'])
                 
     return app
