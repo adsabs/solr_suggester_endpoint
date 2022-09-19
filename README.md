@@ -4,7 +4,7 @@ This service makes calls to the the SOLR /suggest endpoint based on the suggeste
 
 - Author names: `AuthorSuggesterView`
 - Normalized author names: `AuthorNormSuggesterView`
-- Universal Astronomy Thesaurus Terms: `UATSuggesterView`
+- ADS keywords: `KeywordSuggesterView`
 
 Each suggester uses a slightly different implementation of the SOLR suggester and takes slightly different inputs.
 The endpoints defined in this service break out each suggester into its own endpoint and provide reasonable defaults for autocomplete functionality.
